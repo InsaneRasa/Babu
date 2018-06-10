@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+	<bean id="student1" class="com.di.beans.Students">
+
+		<!-- Constructor Injection -->
+		<constructor-arg name="name" value="Babu" />
+		<constructor-arg name="add" value="Hyderabad" />
+		<constructor-arg name="age" value="24" />
+	</bean>
+	<bean id="student2" class="com.di.beans.Students">
+
+		<!-- Constructor Injection -->
+		<constructor-arg name="name" value="Pravat" />
+		<constructor-arg name="add" value="Kandasar" />
+		<constructor-arg name="age" value="25" />
+
+		<!-- Setter Injection -->
+		<!-- <property name="name" value="Ganesh" /> <property name="add" value="Cuttack" 
+			/> <property name="age" value="27" /> -->
+	</bean>
+
+	<bean id="division" class="com.di.beans.Division">
+		<property name="ranks">
+			<map key-type="java.lang.String" value-type="com.di.beans.Students">
+				<entry>
+					<key>
+						<value>1</value>
+					</key>
+					<ref bean="student1" />
+				</entry>
+				<entry key="2" value-ref="student2" />
+			</map>
+		</property>
+		<!-- Here u can not take your own implemetion of collection class so the 
+			default implementation will be LinkedHashMap -->
+		<property name="studentsInDivision">
+			<util:map key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="First-Class" value="59" />
+				<entry key="Second-Class" value="43" />
+			</util:map>
+		</property>
+
+		<property name="stus" ref="studs" />
+
+		<!-- <property name="subjects" ref="subjs" /> -->
+
+		<property name="subjects">
+			<list merge="true">
+				<value>History</value>
+				<value>MIL</value>
+				<value>Math</value>
+				<value>Bio</value>
+			</list>
+		</property>
+
+	</bean>
+	<!-- Here u can define u r own implementation class and reuse this for multiple 
+		classes -->
+	<util:set id="studs" set-class="java.util.HashSet" value-type="com.di.beans.Students">
+		<ref bean="student1" />
+		<ref bean="student2" />
+	</util:set>
+	<util:list id="subjs" list-class="java.util.LinkedList"
+		value-type="java.lang.String">
+		<value>History</value>
+		<value>MIL</value>
+		<value>Math</value>
+		<value>Bio</value>
+	</util:list>
+	<!-- Collection merging only works if both the collection is of same type and does not work with utill namespace -->
+	<bean id="Div2" parent="division">
+		<property name="subjects">
+			<list merge="true">
+				<value>English</value>
+				<value>Sanskrit</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>
